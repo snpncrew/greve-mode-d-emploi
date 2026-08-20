@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grève août 2026 — SNPNC-FO Frenchbee</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@600;700;800&family=DM+Sans:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#283241;
+    --ink-deep:#0F141B;
+    --ink-mid:#1B2531;
+    --ink-soft:#212C3A;
+    --blue:#175DA4;
+    --cyan:#11ABE0;
+    --cyan-dim:#7FD6EF;
+    --paper:#F4F7FA;
+    --white:#FFFFFF;
+    --red:#C8102E;
+    --amber:#F2A93B;
+    --green:#3DBE7A;
+    --line:rgba(255,255,255,0.10);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--ink-deep);
+    color:var(--paper);
+    font-family:'DM Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:640px;margin:0 auto;padding:0 20px 70px;}
+
+  /* HERO */
+  .hero{
+    padding:32px 20px 26px;
+    background: radial-gradient(120% 140% at 8% -10%, var(--blue) 0%, var(--ink-mid) 45%, var(--ink-deep) 100%);
+    border-bottom:1px solid var(--line);
+  }
+  .eyebrow{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--cyan);font-weight:700;
+    display:flex;align-items:center;gap:8px;}
+  .eyebrow .dot{width:6px;height:6px;border-radius:50%;background:var(--red);display:inline-block;animation:pulse 2s infinite;}
+  @keyframes pulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+  h1{font-family:'Syne',sans-serif;font-weight:800;font-size:30px;line-height:1.08;margin:14px 0 8px;letter-spacing:-.01em;}
+  .sub{color:var(--cyan-dim);font-size:15px;line-height:1.5;max-width:48ch;}
+  .strike-banner{display:inline-block;margin-top:16px;padding:8px 14px;background:rgba(200,16,46,0.16);
+    border:1px solid var(--red);border-radius:999px;font-size:13px;color:#FFD4DA;font-weight:500;}
+  .strike-banner strong{color:var(--white);}
+
+  /* NAV DOTS */
+  .steps-nav{display:flex;gap:6px;padding:16px 20px 0;max-width:640px;margin:0 auto;}
+  .steps-nav a{flex:1;height:4px;border-radius:2px;background:var(--ink-mid);display:block;text-decoration:none;}
+  .steps-nav a.done{background:var(--cyan);}
+
+  /* CARD */
+  .card{background:var(--ink-mid);border:1px solid var(--line);border-radius:16px;padding:20px;margin-top:20px;}
+  .card h2{font-family:'Syne',sans-serif;font-size:16px;font-weight:700;margin:0 0 12px;color:var(--white);
+    display:flex;align-items:center;gap:8px;}
+  .card h2 .num{font-family:'Syne',sans-serif;color:var(--cyan);font-size:13px;}
+  p{font-size:14.5px;line-height:1.6;color:#C9D6E6;margin:0 0 10px;}
+  strong{color:var(--white);}
+
+  /* TIMELINE */
+  .runway{position:relative;margin:26px 4px 10px;height:64px;}
+  .runway .track{position:absolute;top:28px;left:0;right:0;height:2px;
+    background:repeating-linear-gradient(90deg, var(--line) 0 10px, transparent 10px 18px);}
+  .runway .marker{position:absolute;top:14px;display:flex;flex-direction:column;align-items:center;}
+  .runway .marker .pt{width:12px;height:12px;border-radius:50%;border:2px solid var(--ink-deep);}
+  .runway .marker .lbl{font-size:10.5px;color:#9AAFC9;margin-top:6px;white-space:nowrap;font-weight:500;}
+  .runway .marker .lbl b{color:var(--white);display:block;font-size:11px;}
+  .runway .m48{left:0%;} .runway .m48 .pt{background:var(--red);}
+  .runway .m24{left:50%;transform:translateX(-50%);} .runway .m24 .pt{background:var(--amber);}
+  .runway .mdep{right:0;text-align:right;} .runway .mdep .pt{background:var(--cyan);}
+
+  /* BASE TOGGLE */
+  .base-toggle{display:flex;gap:8px;margin-bottom:16px;}
+  .base-btn{flex:1;padding:14px 10px;border-radius:12px;background:var(--ink-deep);border:1px solid var(--line);
+    text-align:center;cursor:pointer;}
+  .base-btn .code{font-family:'Syne',sans-serif;font-weight:800;font-size:18px;color:var(--white);}
+  .base-btn .place{font-size:11px;color:#9AAFC9;margin-top:2px;}
+  .base-btn.active{background:var(--cyan);border-color:var(--cyan);}
+  .base-btn.active .code, .base-btn.active .place{color:var(--ink-deep);}
+
+  /* CALENDAR */
+  .cal-strip{display:flex;gap:8px;overflow-x:auto;padding:4px 2px 8px;-webkit-overflow-scrolling:touch;}
+  .day-pill{flex:0 0 auto;width:52px;padding:10px 0 8px;border-radius:12px;background:var(--ink-deep);
+    border:1px solid var(--line);text-align:center;cursor:pointer;transition:.15s;}
+  .day-pill .dow{font-size:10px;color:#8FA3C0;text-transform:uppercase;letter-spacing:.05em;}
+  .day-pill .num{font-family:'Syne',sans-serif;font-weight:700;font-size:18px;margin-top:2px;color:var(--white);}
+  .day-pill.today{border-color:var(--cyan);}
+  .day-pill.selected{background:var(--cyan);}
+  .day-pill.selected .dow, .day-pill.selected .num{color:var(--ink-deep);}
+
+  /* FLIGHT LIST */
+  .flight-list{display:flex;flex-direction:column;gap:8px;margin-top:4px;}
+  .flight-item{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-radius:12px;
+    background:var(--ink-deep);border:1px solid var(--line);cursor:pointer;}
+  .flight-item.selected{background:rgba(17,171,224,0.14);border-color:var(--cyan);}
+  .flight-item .left .num{font-family:'Syne',sans-serif;font-weight:700;font-size:15px;color:var(--white);}
+  .flight-item .left .dest{font-size:12.5px;color:#9AAFC9;margin-top:1px;}
+  .flight-item .right{font-family:'Syne',sans-serif;font-size:14px;color:var(--cyan-dim);font-weight:700;}
+  .flight-item.selected .right{color:var(--cyan);}
+
+  .manual-toggle{margin-top:10px;font-size:13px;color:var(--cyan-dim);text-decoration:underline;cursor:pointer;display:inline-block;}
+  .manual-fields{display:none;margin-top:12px;}
+  .manual-fields.show{display:block;}
+
+  label{display:block;font-size:12px;font-weight:700;color:#9AAFC9;text-transform:uppercase;letter-spacing:.04em;margin:14px 0 6px;}
+  input{width:100%;background:var(--ink-deep);border:1px solid var(--line);color:var(--white);
+    padding:12px 14px;border-radius:10px;font-size:15px;font-family:'DM Sans',sans-serif;}
+  input:focus{outline:none;border-color:var(--cyan);}
+  .row{display:flex;gap:10px;}
+  .row > div{flex:1;}
+  button{margin-top:18px;width:100%;background:var(--cyan);color:var(--ink-deep);border:none;padding:14px;
+    border-radius:10px;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;cursor:pointer;}
+  button:active{transform:scale(.99);}
+  button.ghost{background:transparent;border:1px solid var(--line);color:var(--paper);}
+  button.secondary{background:var(--ink-deep);border:1px solid var(--cyan);color:var(--cyan);}
+  button:disabled{opacity:.4;cursor:not-allowed;}
+  .btn-row{display:flex;gap:10px;}
+  .btn-row button{margin-top:0;}
+
+  /* RESULT */
+  .result{display:none;margin-top:18px;}
+  .result.show{display:block;}
+  .deadline-box{border-radius:12px;padding:14px 16px;margin-bottom:10px;border:1px solid;}
+  .deadline-box.urgent{background:rgba(200,16,46,0.12);border-color:var(--red);}
+  .deadline-box.warn{background:rgba(242,169,59,0.1);border-color:var(--amber);}
+  .deadline-box .tag{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.05em;}
+  .deadline-box.urgent .tag{color:var(--red);}
+  .deadline-box.warn .tag{color:var(--amber);}
+  .deadline-box .when{font-family:'Syne',sans-serif;font-size:19px;font-weight:700;color:var(--white);margin-top:4px;}
+  .deadline-box .note{font-size:13px;color:#B9C7DB;margin-top:4px;}
+  .past-flag{color:var(--red);font-size:12.5px;font-weight:700;margin-top:6px;}
+
+  /* DECLARATION */
+  .decl-preview{background:var(--ink-deep);border:1px solid var(--line);border-radius:12px;padding:16px 18px;
+    margin-top:16px;font-size:13.5px;line-height:1.65;color:#D6E0EC;white-space:pre-wrap;font-family:'DM Sans',sans-serif;}
+  .decl-preview .placeholder{color:#5A6E8C;font-style:italic;}
+  .copy-feedback{font-size:12.5px;color:var(--green);margin-top:8px;display:none;font-weight:700;}
+  .copy-feedback.show{display:block;}
+  .checklist{margin-top:14px;display:flex;flex-direction:column;gap:8px;}
+  .checklist .item{display:flex;gap:10px;align-items:flex-start;font-size:13.5px;color:#C9D6E6;line-height:1.5;}
+  .checklist .item .chk{width:18px;height:18px;border-radius:5px;border:1.5px solid var(--cyan);flex:0 0 18px;margin-top:1px;}
+
+  /* ACCORDION */
+  .accordion{margin-top:16px;}
+  details{background:var(--ink-deep);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden;}
+  details summary{padding:15px 18px;cursor:pointer;font-family:'Syne',sans-serif;font-weight:700;font-size:14.5px;
+    color:var(--white);list-style:none;display:flex;justify-content:space-between;align-items:center;}
+  details summary::-webkit-details-marker{display:none;}
+  details summary::after{content:"+";color:var(--cyan);font-size:20px;font-weight:400;}
+  details[open] summary::after{content:"–";}
+  details .body{padding:0 18px 16px;}
+  details .body ul{margin:0;padding-left:18px;}
+  details .body li{font-size:13.5px;line-height:1.6;color:#C9D6E6;margin-bottom:6px;}
+  details .body p{font-size:13.5px;}
+
+  footer{text-align:center;color:#5A6E8C;font-size:12px;margin-top:32px;padding:0 20px;line-height:1.6;}
+  a{color:var(--cyan);}
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="wrap" style="padding:0;">
+    <div class="eyebrow"><span class="dot"></span>ORY · RUN</div>
+    <h1>Grève, mode d'emploi</h1>
+    <p class="sub">Choisis ta base et ton vol : calcule ta date limite, puis génère et envoie ta déclaration en un geste.</p>
+    <div class="strike-banner">Préavis déposé — grève du <strong>27</strong> au <strong>31 août 2026</strong>, reconductible</div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <div class="card" id="step-regle">
+    <h2><span class="num">01</span> La règle</h2>
+    <p>Le SNPNC-FO a déposé un préavis de grève couvrant la <strong>période du 27 au 31 août 2026</strong>, reconductible, après des mois d'alertes restées sans réponse concrète de la Direction.</p>
+    <p>Conformément à l'<strong>article L.1114-3 du Code des transports</strong>, chaque PNC souhaitant participer doit adresser une déclaration individuelle d'intention à l'entreprise <strong>au plus tard 48h avant le début de sa première activité concernée</strong> par la grève. Tu as ensuite jusqu'à <strong>24h avant ta reprise</strong> pour te rétracter ou annoncer que tu reprends le travail.</p>
+    <p>C'est un droit constitutionnel : la grève suspend ton contrat de travail pendant ta participation, sans sanction possible. Pas besoin d'être syndiqué. Ta déclaration reste couverte par le secret professionnel.</p>
+
+    <div class="runway">
+      <div class="track"></div>
+      <div class="marker m48"><div class="pt"></div><div class="lbl"><b>J-48h</b>déclaration limite</div></div>
+      <div class="marker m24"><div class="pt"></div><div class="lbl"><b>J-24h</b>rétractation limite</div></div>
+      <div class="marker mdep"><div class="pt"></div><div class="lbl"><b>Décollage</b>ton vol</div></div>
+    </div>
+  </div>
+
+  <div class="card" id="step-vol">
+    <h2><span class="num">02</span> Ta base</h2>
+    <div class="base-toggle">
+      <div class="base-btn active" id="btnORY" onclick="selectBase('ORY')">
+        <div class="code">ORY</div><div class="place">Paris-Orly</div>
+      </div>
+      <div class="base-btn" id="btnRUN" onclick="selectBase('RUN')">
+        <div class="code">RUN</div><div class="place">La Réunion</div>
+      </div>
+    </div>
+
+    <h2 style="margin-top:6px;"><span class="num">03</span> Ton vol</h2>
+    <p>Choisis la date parmi les jours de grève, puis ton vol au départ de ta base.</p>
+
+    <div class="cal-strip" id="calStrip"></div>
+    <div class="flight-list" id="flightList"></div>
+
+    <span class="manual-toggle" onclick="toggleManual()" id="manualToggleLabel">Vol non listé ou horaire différent ? saisis-le manuellement</span>
+
+    <div class="manual-fields" id="manualFields">
+      <label for="flightNum">Numéro de vol</label>
+      <input id="flightNum" type="text" placeholder="ex. BF700" autocomplete="off">
+      <div class="row">
+        <div><label for="depTime">Heure locale de départ</label><input id="depTime" type="time"></div>
+      </div>
+    </div>
+
+    <button onclick="calculate()">Calculer mes échéances</button>
+
+    <div class="result" id="result">
+      <div class="deadline-box urgent">
+        <div class="tag">Déclare-toi avant</div>
+        <div class="when" id="deadline48"></div>
+        <div class="note">Envoie ta déclaration avant cette heure. Passé ce délai tu ne peux plus te déclarer gréviste sur ce vol.</div>
+      </div>
+      <div class="deadline-box warn">
+        <div class="tag">Si tu changes d'avis, avant</div>
+        <div class="when" id="deadline24"></div>
+        <div class="note">Dernier moment pour annuler ta participation ou annoncer ta reprise.</div>
+      </div>
+      <div class="past-flag" id="pastFlag" style="display:none;">⚠️ Le délai des 48h est déjà dépassé pour ce vol — vérifie l'heure de pointage exacte, pas seulement le décollage.</div>
+    </div>
+  </div>
+
+  <div class="card" id="step-declaration">
+    <h2><span class="num">04</span> Ta déclaration</h2>
+    <p>Renseigne tes informations : le mail se génère automatiquement, prêt à copier ou à ouvrir directement dans ta messagerie.</p>
+
+    <label for="nom">Nom</label>
+    <input id="nom" type="text" placeholder="Ton nom" autocomplete="off" oninput="updateDeclaration()">
+    <label for="prenom">Prénom</label>
+    <input id="prenom" type="text" placeholder="Ton prénom" autocomplete="off" oninput="updateDeclaration()">
+    <label for="idnum">ID Number</label>
+    <input id="idnum" type="text" placeholder="Ton numéro ID" autocomplete="off" oninput="updateDeclaration()">
+
+    <div class="decl-preview" id="declPreview"></div>
+
+    <div class="btn-row" style="margin-top:14px;">
+      <button class="secondary" onclick="copyDeclaration()">Copier le texte</button>
+      <button onclick="openMail()">Ouvrir dans ma messagerie</button>
+    </div>
+    <div class="copy-feedback" id="copyFeedback">✓ Texte copié</div>
+
+    <div class="checklist">
+      <div class="item"><div class="chk"></div>À envoyer depuis <strong>ta messagerie professionnelle</strong>, à <strong>hr@frenchbee.com</strong></div>
+      <div class="item"><div class="chk"></div>Copie conseillée à <strong>cdc.frenchbee@gmail.com</strong></div>
+      <div class="item"><div class="chk"></div>Le mail doit contenir : <strong>Nom, Prénom, ID Number</strong></div>
+    </div>
+  </div>
+
+  <div class="card" id="step-infos">
+    <h2><span class="num">05</span> Bon à savoir</h2>
+    <div class="accordion">
+      <details>
+        <summary>Pendant la grève</summary>
+        <div class="body"><ul>
+          <li>Ne pas effectuer de vol, MEP ou toute autre activité professionnelle.</li>
+          <li>Ton contrat de travail est suspendu pendant ta participation au mouvement.</li>
+          <li>Tu n'as pas à répondre aux sollicitations liées à l'exécution de ton activité pendant ta période de grève.</li>
+        </ul></div>
+      </details>
+      <details>
+        <summary>Cas particuliers</summary>
+        <div class="body"><ul>
+          <li><strong>En repos ou en congés :</strong> aucune démarche particulière autre que la déclaration d'intention si tu participes.</li>
+          <li><strong>En arrêt maladie</strong> avant le début de la grève : tu demeures en arrêt maladie.</li>
+          <li><strong>En rotation :</strong> la grève ne peut pas être commencée en escale ; elle peut débuter au retour, sous réserve du respect du délai légal de déclaration.</li>
+        </ul></div>
+      </details>
+      <details>
+        <summary>Activités toujours autorisées</summary>
+        <div class="body"><ul>
+          <li>Missions réquisitionnées par l'État (si applicable).</li>
+          <li>Visites médicales réglementaires (CEMPN ou médecine du travail).</li>
+        </ul></div>
+      </details>
+      <details>
+        <summary>Soutenir sans faire grève</summary>
+        <div class="body"><ul>
+          <li>Respecter le droit à la déconnexion des collègues pendant leurs OFF et congés.</li>
+          <li>Relayer les informations du mouvement.</li>
+          <li>Soutenir tes collègues grévistes — tout le monde n'est pas dans la même situation (CDD, arrêt maladie, OFF), et c'est normal.</li>
+        </ul></div>
+      </details>
+      <details>
+        <summary>Après la grève</summary>
+        <div class="body">
+          <p>La reprise normale de l'activité intervient à compter du <strong>1er septembre 2026 à 00h00</strong>, selon ton planning.</p>
+          <p>Si tu souhaites reprendre ton activité <strong>avant</strong> la fin du mouvement alors que tu t'étais déclaré(e) gréviste, informe l'entreprise <strong>au moins 24h avant ta reprise</strong>.</p>
+          <p>Si le préavis est levé avant son terme par le SNPNC-FO, les modalités de reprise te seront communiquées séparément.</p>
+        </div>
+      </details>
+    </div>
+  </div>
+
+  <footer>
+    Outil indépendant SNPNC-FO — les vols listés et leurs horaires sont indicatifs (programme French Bee, sujet à changement). Vérifie toujours ton heure de pointage exacte sur ton roster avant d'envoyer ta déclaration.<br><br>
+    Sans vous, rien ne vole. Avec vous, tout devient possible.
+  </footer>
+</div>
+
+<script>
+const STRIKE_START = new Date(2026,7,27);
+const STRIKE_END = new Date(2026,7,31);
+const DOW = ['DIM','LUN','MAR','MER','JEU','VEN','SAM'];
+
+const FLIGHTS = {
+  ORY: [
+    {num:'BF700', dest:'Saint-Denis (RUN)', time:'19:55'},
+    {num:'BF702', dest:'Saint-Denis (RUN)', time:'16:30'},
+    {num:'BF704', dest:'Saint-Denis (RUN)', time:'08:10'},
+    {num:'BF710', dest:'San Francisco (SFO)', time:'18:30'},
+    {num:'BF720', dest:'New York (EWR)', time:'18:50'},
+    {num:'BF730', dest:'Los Angeles (LAX)', time:'14:50'},
+    {num:'BF742', dest:'Miami (MIA)', time:'17:00'},
+    {num:'BF760', dest:'Montréal (YUL)', time:'19:20'},
+  ],
+  RUN: [
+    {num:'BF701', dest:'Paris-Orly (ORY)', time:'23:20'},
+    {num:'BF703', dest:'Paris-Orly (ORY)', time:'08:00'},
+    {num:'BF705', dest:'Paris-Orly (ORY)', time:'12:20'},
+  ]
+};
+
+let currentBase = 'ORY';
+let selectedDateISO = null;
+let selectedFlight = null;
+let manualMode = false;
+let lastComputed = null;
+
+function pad(n){return n.toString().padStart(2,'0');}
+function isoDate(d){return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;}
+function fmt(d){
+  const days=['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
+  const months=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
+  return `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]} · ${pad(d.getHours())}h${pad(d.getMinutes())}`;
+}
+
+function buildCalendar(){
+  const strip = document.getElementById('calStrip');
+  strip.innerHTML = '';
+  const today = new Date(); today.setHours(0,0,0,0);
+  const d = new Date(STRIKE_START);
+  while(d <= STRIKE_END){
+    const iso = isoDate(d);
+    const isToday = isoDate(today) === iso;
+    const pill = document.createElement('div');
+    pill.className = 'day-pill' + (isToday ? ' today' : '') + (iso === selectedDateISO ? ' selected' : '');
+    pill.innerHTML = `<div class="dow">${DOW[d.getDay()]}</div><div class="num">${d.getDate()}</div>`;
+    pill.onclick = () => selectDay(pill, iso);
+    strip.appendChild(pill);
+    d.setDate(d.getDate()+1);
+  }
+}
+function selectDay(pill, iso){
+  document.querySelectorAll('.day-pill').forEach(p=>p.classList.remove('selected'));
+  pill.classList.add('selected');
+  selectedDateISO = iso;
+}
+function buildFlightList(){
+  const list = document.getElementById('flightList');
+  list.innerHTML = '';
+  FLIGHTS[currentBase].forEach(f=>{
+    const item = document.createElement('div');
+    item.className = 'flight-item' + (selectedFlight && selectedFlight.num===f.num ? ' selected' : '');
+    item.innerHTML = `<div class="left"><div class="num">${f.num}</div><div class="dest">→ ${f.dest}</div></div><div class="right">${f.time}</div>`;
+    item.onclick = () => selectFlight(f, item);
+    list.appendChild(item);
+  });
+}
+function selectFlight(f, el){
+  document.querySelectorAll('.flight-item').forEach(i=>i.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedFlight = f;
+  manualMode = false;
+  document.getElementById('manualFields').classList.remove('show');
+}
+function selectBase(base){
+  currentBase = base;
+  selectedFlight = null;
+  document.getElementById('btnORY').classList.toggle('active', base==='ORY');
+  document.getElementById('btnRUN').classList.toggle('active', base==='RUN');
+  buildFlightList();
+}
+function toggleManual(){
+  manualMode = !manualMode;
+  document.getElementById('manualFields').classList.toggle('show', manualMode);
+  if(manualMode){
+    document.querySelectorAll('.flight-item').forEach(i=>i.classList.remove('selected'));
+    selectedFlight = null;
+  }
+}
+
+function calculate(){
+  if(!selectedDateISO){ alert('Choisis une date de grève (27 → 31 août).'); return; }
+  let flightNum, timeVal;
+  if(manualMode){
+    flightNum = document.getElementById('flightNum').value.trim();
+    timeVal = document.getElementById('depTime').value;
+    if(!timeVal){ alert("Indique l'heure de départ."); return; }
+  } else {
+    if(!selectedFlight){ alert('Choisis un vol dans la liste, ou saisis-le manuellement.'); return; }
+    flightNum = selectedFlight.num;
+    timeVal = selectedFlight.time;
+  }
+  const dep = new Date(`${selectedDateISO}T${timeVal}`);
+  const d48 = new Date(dep.getTime() - 48*3600*1000);
+  const d24 = new Date(dep.getTime() - 24*3600*1000);
+
+  document.getElementById('deadline48').textContent = fmt(d48);
+  document.getElementById('deadline24').textContent = fmt(d24);
+  document.getElementById('pastFlag').style.display = (d48 < new Date()) ? 'block' : 'none';
+  document.getElementById('result').classList.add('show');
+
+  lastComputed = { flightNum: flightNum || '(sans numéro)', base: currentBase, dep, d48, d24 };
+  updateDeclaration();
+  document.getElementById('step-declaration').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function updateDeclaration(){
+  const nom = document.getElementById('nom').value.trim();
+  const prenom = document.getElementById('prenom').value.trim();
+  const idnum = document.getElementById('idnum').value.trim();
+  const preview = document.getElementById('declPreview');
+
+  const nomComplet = (prenom || nom) ? `${prenom || '[Prénom]'} ${nom || '[Nom]'}` : '[Prénom Nom]';
+  const idText = idnum || '[ID Number]';
+
+  const body = `Madame, Monsieur,
+
+Je soussigné(e) ${nomComplet}, ID ${idText}, conformément aux dispositions de l'article L.1114-3 du Code des transports, vous informe de mon intention de participer au mouvement de grève couvrant la période du 27 août 2026 à 00 h 01 au 31 août 2026 à 23 h 59 (heure de Paris).
+
+Veuillez agréer, Madame, Monsieur, l'expression de mes salutations distinguées.
+
+${nomComplet}${idnum ? ' — ID ' + idnum : ''}`;
+
+  preview.textContent = body;
+  window.__declBody = body;
+}
+
+async function copyDeclaration(){
+  if(!window.__declBody) updateDeclaration();
+  try{
+    await navigator.clipboard.writeText(window.__declBody);
+    const fb = document.getElementById('copyFeedback');
+    fb.classList.add('show');
+    setTimeout(()=>fb.classList.remove('show'), 2200);
+  }catch(e){
+    alert("Impossible de copier automatiquement — sélectionne le texte manuellement.");
+  }
+}
+
+function openMail(){
+  if(!window.__declBody) updateDeclaration();
+  const subject = encodeURIComponent("Préavis de grève — Déclaration individuelle d'intention");
+  const body = encodeURIComponent(window.__declBody);
+  const href = `mailto:hr@frenchbee.com?cc=cdc.frenchbee@gmail.com&subject=${subject}&body=${body}`;
+  window.location.href = href;
+}
+
+function init(){
+  buildCalendar();
+  buildFlightList();
+  updateDeclaration();
+}
+init();
+</script>
+
+</body>
+</html>
