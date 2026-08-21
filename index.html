@@ -165,9 +165,9 @@
 
 <div class="hero">
   <div class="wrap" style="padding:0;">
-    <div class="eyebrow"><span class="dot"></span>ORY · RUN</div>
+    <div class="eyebrow"><span class="dot"></span>TOUS LES PNC</div>
     <h1>Grève, mode d'emploi</h1>
-    <p class="sub">Choisis ta base et ton vol : calcule ta date limite, puis génère et envoie ta déclaration en un geste.</p>
+    <p class="sub">Choisis ton jour de grève : calcule ta date limite, puis génère et envoie ta déclaration en un geste.</p>
     <div class="strike-banner">Préavis déposé — grève du <strong>27</strong> au <strong>31 août 2026</strong>, reconductible</div>
   </div>
 </div>
@@ -178,62 +178,39 @@
     <h2><span class="num">01</span> La règle</h2>
     <p>Le SNPNC-FO a déposé un préavis de grève couvrant la <strong>période du 27 au 31 août 2026</strong>, reconductible, après des mois d'alertes restées sans réponse concrète de la Direction.</p>
     <p>Conformément à l'<strong>article L.1114-3 du Code des transports</strong>, chaque PNC souhaitant participer doit adresser une déclaration individuelle d'intention à l'entreprise <strong>au plus tard 48h avant le début de sa première activité concernée</strong> par la grève. Tu as ensuite jusqu'à <strong>24h avant ta reprise</strong> pour te rétracter ou annoncer que tu reprends le travail.</p>
+    <p><strong>Important :</strong> le délai se calcule par rapport au début de ta journée d'activité — pas par rapport à l'heure exacte de ton vol. C'est pour ça qu'il suffit de connaître le jour, pas l'horaire.</p>
     <p>C'est un droit constitutionnel : la grève suspend ton contrat de travail pendant ta participation, sans sanction possible. Pas besoin d'être syndiqué. Ta déclaration reste couverte par le secret professionnel.</p>
 
     <div class="runway">
       <div class="track"></div>
       <div class="marker m48"><div class="pt"></div><div class="lbl"><b>J-48h</b>déclaration limite</div></div>
       <div class="marker m24"><div class="pt"></div><div class="lbl"><b>J-24h</b>rétractation limite</div></div>
-      <div class="marker mdep"><div class="pt"></div><div class="lbl"><b>Décollage</b>ton vol</div></div>
+      <div class="marker mdep"><div class="pt"></div><div class="lbl"><b>Jour J</b>ta 1ère activité</div></div>
     </div>
   </div>
 
   <div class="card" id="step-vol">
-    <h2><span class="num">02</span> Ta base</h2>
-    <div class="base-toggle">
-      <div class="base-btn active" id="btnORY" onclick="selectBase('ORY')">
-        <div class="code">ORY</div><div class="place">Paris-Orly</div>
-      </div>
-      <div class="base-btn" id="btnRUN" onclick="selectBase('RUN')">
-        <div class="code">RUN</div><div class="place">La Réunion</div>
-      </div>
-    </div>
-
-    <h2 style="margin-top:6px;"><span class="num">03</span> Ton vol</h2>
-    <p>Choisis la date parmi les jours de grève, puis ton vol au départ de ta base.</p>
+    <h2><span class="num">02</span> Ton premier jour de grève</h2>
+    <p>La date limite se calcule sur <strong>le jour</strong> où commence ta première activité concernée par la grève — pas sur l'heure exacte de ton vol. Choisis simplement ce jour :</p>
 
     <div class="cal-strip" id="calStrip"></div>
-    <div class="flight-list" id="flightList"></div>
 
-    <span class="manual-toggle" onclick="toggleManual()" id="manualToggleLabel">Vol non listé ou horaire différent ? saisis-le manuellement</span>
-
-    <div class="manual-fields" id="manualFields">
-      <label for="flightNum">Numéro de vol</label>
-      <input id="flightNum" type="text" placeholder="ex. BF700" autocomplete="off">
-      <div class="row">
-        <div><label for="depTime">Heure locale de départ</label><input id="depTime" type="time"></div>
-      </div>
-    </div>
-
-    <button onclick="calculate()">Calculer mes échéances</button>
-
-    <div class="result" id="result">
-      <div class="deadline-box urgent">
+    <div class="result show" id="result" style="margin-top:18px;">
+      <div class="deadline-box urgent" id="deadlineBox" style="display:none;">
         <div class="tag">Déclare-toi avant</div>
         <div class="when" id="deadline48"></div>
-        <div class="note">Envoie ta déclaration avant cette heure. Passé ce délai tu ne peux plus te déclarer gréviste sur ce vol.</div>
+        <div class="note">48h avant le début de ta journée d'activité, pas avant l'heure de ton vol. Passé ce délai tu ne peux plus te déclarer gréviste ce jour-là.</div>
       </div>
-      <div class="deadline-box warn">
-        <div class="tag">Si tu changes d'avis, avant</div>
-        <div class="when" id="deadline24"></div>
-        <div class="note">Dernier moment pour annuler ta participation ou annoncer ta reprise.</div>
+      <div class="deadline-box warn" id="reprisePlaceholder" style="display:none;">
+        <div class="tag">Si tu changes d'avis</div>
+        <div class="when">Au moins 24h avant ta reprise</div>
+        <div class="note">Pour annuler ta participation ou annoncer ta reprise, informe l'entreprise au moins 24h avant l'heure exacte de reprise de ton activité.</div>
       </div>
-      <div class="past-flag" id="pastFlag" style="display:none;">⚠️ Le délai des 48h est déjà dépassé pour ce vol — vérifie l'heure de pointage exacte, pas seulement le décollage.</div>
     </div>
   </div>
 
   <div class="card" id="step-declaration">
-    <h2><span class="num">04</span> Ta déclaration</h2>
+    <h2><span class="num">03</span> Ta déclaration</h2>
     <p>Renseigne tes informations : le mail se génère automatiquement, prêt à copier ou à ouvrir directement dans ta messagerie.</p>
 
     <label for="nom">Nom</label>
@@ -259,7 +236,7 @@
   </div>
 
   <div class="card" id="step-infos">
-    <h2><span class="num">05</span> Bon à savoir</h2>
+    <h2><span class="num">04</span> Bon à savoir</h2>
     <div class="accordion">
       <details>
         <summary>Pendant la grève</summary>
@@ -314,37 +291,20 @@ const STRIKE_START = new Date(2026,7,27);
 const STRIKE_END = new Date(2026,7,31);
 const DOW = ['DIM','LUN','MAR','MER','JEU','VEN','SAM'];
 
-const FLIGHTS = {
-  ORY: [
-    {num:'BF700', dest:'Saint-Denis (RUN)', time:'19:55'},
-    {num:'BF702', dest:'Saint-Denis (RUN)', time:'16:30'},
-    {num:'BF704', dest:'Saint-Denis (RUN)', time:'08:10'},
-    {num:'BF710', dest:'San Francisco (SFO)', time:'18:30'},
-    {num:'BF720', dest:'New York (EWR)', time:'18:50'},
-    {num:'BF730', dest:'Los Angeles (LAX)', time:'14:50'},
-    {num:'BF742', dest:'Miami (MIA)', time:'17:00'},
-    {num:'BF760', dest:'Montréal (YUL)', time:'19:20'},
-  ],
-  RUN: [
-    {num:'BF701', dest:'Paris-Orly (ORY)', time:'23:20'},
-    {num:'BF703', dest:'Paris-Orly (ORY)', time:'08:00'},
-    {num:'BF705', dest:'Paris-Orly (ORY)', time:'12:20'},
-  ]
+// Table officielle SNPNC-FO — date limite = 23h59, 3 jours calendaires avant
+// (48h avant le DÉBUT de la journée d'activité, pas l'heure exacte du vol)
+const DEADLINES = {
+  '2026-08-27': 'lundi 24 août · 23h59',
+  '2026-08-28': 'mardi 25 août · 23h59',
+  '2026-08-29': 'mercredi 26 août · 23h59',
+  '2026-08-30': 'jeudi 27 août · 23h59',
+  '2026-08-31': 'vendredi 28 août · 23h59',
 };
 
-let currentBase = 'ORY';
 let selectedDateISO = null;
-let selectedFlight = null;
-let manualMode = false;
-let lastComputed = null;
 
 function pad(n){return n.toString().padStart(2,'0');}
 function isoDate(d){return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;}
-function fmt(d){
-  const days=['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
-  const months=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
-  return `${days[d.getDay()]} ${d.getDate()} ${months[d.getMonth()]} · ${pad(d.getHours())}h${pad(d.getMinutes())}`;
-}
 
 function buildCalendar(){
   const strip = document.getElementById('calStrip');
@@ -362,68 +322,16 @@ function buildCalendar(){
     d.setDate(d.getDate()+1);
   }
 }
+
 function selectDay(pill, iso){
   document.querySelectorAll('.day-pill').forEach(p=>p.classList.remove('selected'));
   pill.classList.add('selected');
   selectedDateISO = iso;
-}
-function buildFlightList(){
-  const list = document.getElementById('flightList');
-  list.innerHTML = '';
-  FLIGHTS[currentBase].forEach(f=>{
-    const item = document.createElement('div');
-    item.className = 'flight-item' + (selectedFlight && selectedFlight.num===f.num ? ' selected' : '');
-    item.innerHTML = `<div class="left"><div class="num">${f.num}</div><div class="dest">→ ${f.dest}</div></div><div class="right">${f.time}</div>`;
-    item.onclick = () => selectFlight(f, item);
-    list.appendChild(item);
-  });
-}
-function selectFlight(f, el){
-  document.querySelectorAll('.flight-item').forEach(i=>i.classList.remove('selected'));
-  el.classList.add('selected');
-  selectedFlight = f;
-  manualMode = false;
-  document.getElementById('manualFields').classList.remove('show');
-}
-function selectBase(base){
-  currentBase = base;
-  selectedFlight = null;
-  document.getElementById('btnORY').classList.toggle('active', base==='ORY');
-  document.getElementById('btnRUN').classList.toggle('active', base==='RUN');
-  buildFlightList();
-}
-function toggleManual(){
-  manualMode = !manualMode;
-  document.getElementById('manualFields').classList.toggle('show', manualMode);
-  if(manualMode){
-    document.querySelectorAll('.flight-item').forEach(i=>i.classList.remove('selected'));
-    selectedFlight = null;
-  }
-}
 
-function calculate(){
-  if(!selectedDateISO){ alert('Choisis une date de grève (27 → 31 août).'); return; }
-  let flightNum, timeVal;
-  if(manualMode){
-    flightNum = document.getElementById('flightNum').value.trim();
-    timeVal = document.getElementById('depTime').value;
-    if(!timeVal){ alert("Indique l'heure de départ."); return; }
-  } else {
-    if(!selectedFlight){ alert('Choisis un vol dans la liste, ou saisis-le manuellement.'); return; }
-    flightNum = selectedFlight.num;
-    timeVal = selectedFlight.time;
-  }
-  const dep = new Date(`${selectedDateISO}T${timeVal}`);
-  const d48 = new Date(dep.getTime() - 48*3600*1000);
-  const d24 = new Date(dep.getTime() - 24*3600*1000);
+  document.getElementById('deadline48').textContent = DEADLINES[iso];
+  document.getElementById('deadlineBox').style.display = 'block';
+  document.getElementById('reprisePlaceholder').style.display = 'block';
 
-  document.getElementById('deadline48').textContent = fmt(d48);
-  document.getElementById('deadline24').textContent = fmt(d24);
-  document.getElementById('pastFlag').style.display = (d48 < new Date()) ? 'block' : 'none';
-  document.getElementById('result').classList.add('show');
-
-  lastComputed = { flightNum: flightNum || '(sans numéro)', base: currentBase, dep, d48, d24 };
-  updateDeclaration();
   document.getElementById('step-declaration').scrollIntoView({behavior:'smooth', block:'start'});
 }
 
@@ -470,7 +378,6 @@ function openMail(){
 
 function init(){
   buildCalendar();
-  buildFlightList();
   updateDeclaration();
 }
 init();
