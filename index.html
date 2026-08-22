@@ -110,6 +110,11 @@
   input{width:100%;background:var(--ink-deep);border:1px solid var(--line);color:var(--white);
     padding:12px 14px;border-radius:10px;font-size:15px;font-family:'DM Sans',sans-serif;}
   input:focus{outline:none;border-color:var(--cyan);}
+  select{width:100%;background:var(--ink-deep);border:1px solid var(--line);color:var(--white);
+    padding:12px 14px;border-radius:10px;font-size:15px;font-family:'DM Sans',sans-serif;appearance:none;
+    background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237FD6EF' stroke-width='1.6' fill='none' fill-rule='evenodd'/%3E%3C/svg%3E");
+    background-repeat:no-repeat;background-position:right 14px center;}
+  select:focus{outline:none;border-color:var(--cyan);}
   .row{display:flex;gap:10px;}
   .row > div{flex:1;}
   button{margin-top:18px;width:100%;background:var(--cyan);color:var(--ink-deep);border:none;padding:14px;
@@ -220,6 +225,13 @@
     <label for="idnum">ID Number</label>
     <input id="idnum" type="text" placeholder="Ton numéro ID" autocomplete="off" oninput="updateDeclaration()">
 
+    <label>Ta période de grève déclarée</label>
+    <p style="margin-top:-4px;">Tu n'es pas obligé·e de te déclarer gréviste sur toute la période — choisis juste les jours qui te concernent.</p>
+    <div class="row">
+      <div><label for="periodStart" style="margin-top:0;">Du</label><select id="periodStart" onchange="onPeriodChange()"></select></div>
+      <div><label for="periodEnd" style="margin-top:0;">Au</label><select id="periodEnd" onchange="onPeriodChange()"></select></div>
+    </div>
+
     <div class="decl-preview" id="declPreview"></div>
 
     <div class="btn-row" style="margin-top:14px;">
@@ -230,7 +242,7 @@
 
     <div class="checklist">
       <div class="item"><div class="chk"></div>À envoyer depuis <strong>ta messagerie professionnelle</strong>, à <strong>hr@frenchbee.com</strong></div>
-      <div class="item"><div class="chk"></div>Copie conseillée à <strong>grevefbu2026@gmail.com</strong></div>
+      <div class="item"><div class="chk"></div>Copie conseillée à <strong>grevepnc26@gmail.com</strong></div>
       <div class="item"><div class="chk"></div>Le mail doit contenir : <strong>Nom, Prénom, ID Number</strong></div>
     </div>
   </div>
@@ -332,7 +344,51 @@ function selectDay(pill, iso){
   document.getElementById('deadlineBox').style.display = 'block';
   document.getElementById('reprisePlaceholder').style.display = 'block';
 
+  const startSelect = document.getElementById('periodStart');
+  if(startSelect){
+    startSelect.value = iso;
+    onPeriodChange();
+  }
+
   document.getElementById('step-declaration').scrollIntoView({behavior:'smooth', block:'start'});
+}
+
+function frenchDateLabel(iso){
+  const days=['dimanche','lundi','mardi','mercredi','jeudi','vendredi','samedi'];
+  const months=['janvier','février','mars','avril','mai','juin','juillet','août','septembre','octobre','novembre','décembre'];
+  const [y,m,d] = iso.split('-').map(Number);
+  const dt = new Date(y, m-1, d);
+  return `${days[dt.getDay()]} ${d} ${months[m-1]}`;
+}
+function shortDateLabel(iso){
+  const [y,m,d] = iso.split('-').map(Number);
+  const dt = new Date(y, m-1, d);
+  const days=['dim','lun','mar','mer','jeu','ven','sam'];
+  return `${days[dt.getDay()]} ${d} août`;
+}
+
+function buildPeriodSelects(){
+  const startSel = document.getElementById('periodStart');
+  const endSel = document.getElementById('periodEnd');
+  startSel.innerHTML = '';
+  endSel.innerHTML = '';
+  const d = new Date(STRIKE_START);
+  while(d <= STRIKE_END){
+    const iso = isoDate(d);
+    const label = shortDateLabel(iso);
+    startSel.innerHTML += `<option value="${iso}">${label}</option>`;
+    endSel.innerHTML += `<option value="${iso}">${label}</option>`;
+    d.setDate(d.getDate()+1);
+  }
+  startSel.value = isoDate(STRIKE_START);
+  endSel.value = isoDate(STRIKE_END);
+}
+
+function onPeriodChange(){
+  const startSel = document.getElementById('periodStart');
+  const endSel = document.getElementById('periodEnd');
+  if(endSel.value < startSel.value){ endSel.value = startSel.value; }
+  updateDeclaration();
 }
 
 function updateDeclaration(){
@@ -344,9 +400,14 @@ function updateDeclaration(){
   const nomComplet = (prenom || nom) ? `${prenom || '[Prénom]'} ${nom || '[Nom]'}` : '[Prénom Nom]';
   const idText = idnum || '[ID Number]';
 
+  const startSel = document.getElementById('periodStart');
+  const endSel = document.getElementById('periodEnd');
+  const startLabel = startSel && startSel.value ? frenchDateLabel(startSel.value) : 'jeudi 27 août';
+  const endLabel = endSel && endSel.value ? frenchDateLabel(endSel.value) : 'lundi 31 août';
+
   const body = `Madame, Monsieur,
 
-Je soussigné(e) ${nomComplet}, ID ${idText}, conformément aux dispositions de l'article L.1114-3 du Code des transports, vous informe de mon intention de participer au mouvement de grève couvrant la période du 27 août 2026 à 00 h 01 au 31 août 2026 à 23 h 59 (heure de Paris).
+Je soussigné(e) ${nomComplet}, ID ${idText}, conformément aux dispositions de l'article L.1114-3 du Code des transports, vous informe de mon intention de participer au mouvement de grève couvrant la période du ${startLabel} 2026 à 00 h 01 au ${endLabel} 2026 à 23 h 59 (heure de Paris).
 
 Veuillez agréer, Madame, Monsieur, l'expression de mes salutations distinguées.
 
@@ -372,12 +433,13 @@ function openMail(){
   if(!window.__declBody) updateDeclaration();
   const subject = encodeURIComponent("Préavis de grève — Déclaration individuelle d'intention");
   const body = encodeURIComponent(window.__declBody);
-  const href = `mailto:hr@frenchbee.com?cc=cdc.frenchbee@gmail.com&subject=${subject}&body=${body}`;
+  const href = `mailto:hr@frenchbee.com?cc=grevepnc26@gmail.com&subject=${subject}&body=${body}`;
   window.location.href = href;
 }
 
 function init(){
   buildCalendar();
+  buildPeriodSelects();
   updateDeclaration();
 }
 init();
