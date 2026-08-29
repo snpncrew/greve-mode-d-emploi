@@ -173,7 +173,7 @@
     <div class="eyebrow"><span class="dot"></span>TOUS LES PNC</div>
     <h1>Grève, mode d'emploi</h1>
     <p class="sub">Choisis ton jour de grève : calcule ta date limite, puis génère et envoie ta déclaration en un geste.</p>
-    <div class="strike-banner">Préavis déposé — grève du <strong>27</strong> au <strong>31 août 2026</strong>, reconductible</div>
+    <div class="strike-banner">Grève reconduite — du <strong>27 août</strong> au <strong>6 septembre 2026</strong></div>
   </div>
 </div>
 
@@ -181,7 +181,7 @@
 
   <div class="card" id="step-regle">
     <h2><span class="num">01</span> La règle</h2>
-    <p>Le SNPNC-FO a déposé un préavis de grève couvrant la <strong>période du 27 au 31 août 2026</strong>, reconductible, après des mois d'alertes restées sans réponse concrète de la Direction.</p>
+    <p>Le SNPNC-FO a déposé un préavis de grève couvrant initialement la période du 27 au 31 août 2026. Le mouvement a été <strong>reconduit jusqu'au 6 septembre 2026</strong>, après des mois d'alertes restées sans réponse concrète de la Direction.</p>
     <p>Conformément à l'<strong>article L.1114-3 du Code des transports</strong>, chaque PNC souhaitant participer doit adresser une déclaration individuelle d'intention à l'entreprise <strong>au plus tard 48h avant le début de sa première activité concernée</strong> par la grève. Tu as ensuite jusqu'à <strong>24h avant ta reprise</strong> pour te rétracter ou annoncer que tu reprends le travail.</p>
     <p><strong>Important :</strong> le délai se calcule par rapport au début de ta journée d'activité — pas par rapport à l'heure exacte de ton vol. C'est pour ça qu'il suffit de connaître le jour, pas l'horaire.</p>
     <p>C'est un droit constitutionnel : la grève suspend ton contrat de travail pendant ta participation, sans sanction possible. Pas besoin d'être syndiqué. Ta déclaration reste couverte par le secret professionnel.</p>
@@ -241,8 +241,8 @@
     <div class="copy-feedback" id="copyFeedback">✓ Texte copié</div>
 
     <div class="checklist">
-      <div class="item"><div class="chk"></div>À envoyer depuis <strong>ta messagerie professionnelle</strong>, à <strong>hr@frenchbee.com</strong></div>
-      <div class="item"><div class="chk"></div>Copie conseillée à <strong>grevepnc26@gmail.com</strong></div>
+      <div class="item"><div class="chk"></div>À envoyer depuis <strong>ta messagerie professionnelle</strong>, à <strong>hr@frenchbee.com</strong> et <strong>strikecabincrew@frenchbee.com</strong></div>
+      <div class="item"><div class="chk"></div>Copie conseillée à <strong>grevefbu2026@gmail.com</strong></div>
       <div class="item"><div class="chk"></div>Le mail doit contenir : <strong>Nom, Prénom, ID Number</strong></div>
     </div>
   </div>
@@ -284,7 +284,7 @@
       <details>
         <summary>Après la grève</summary>
         <div class="body">
-          <p>La reprise normale de l'activité intervient à compter du <strong>1er septembre 2026 à 00h00</strong>, selon ton planning.</p>
+          <p>La reprise normale de l'activité intervient à compter du <strong>7 septembre 2026 à 00h00</strong>, selon ton planning — sauf nouvelle reconduction du mouvement, qui te serait communiquée séparément.</p>
           <p>Si tu souhaites reprendre ton activité <strong>avant</strong> la fin du mouvement alors que tu t'étais déclaré(e) gréviste, informe l'entreprise <strong>au moins 24h avant ta reprise</strong>.</p>
           <p>Si le préavis est levé avant son terme par le SNPNC-FO, les modalités de reprise te seront communiquées séparément.</p>
         </div>
@@ -300,17 +300,24 @@
 
 <script>
 const STRIKE_START = new Date(2026,7,27);
-const STRIKE_END = new Date(2026,7,31);
+const STRIKE_END = new Date(2026,8,6);
 const DOW = ['DIM','LUN','MAR','MER','JEU','VEN','SAM'];
 
 // Table officielle SNPNC-FO — date limite = 23h59, 3 jours calendaires avant
 // (48h avant le DÉBUT de la journée d'activité, pas l'heure exacte du vol)
+// Mouvement reconduit jusqu'au 6 septembre 2026
 const DEADLINES = {
   '2026-08-27': 'lundi 24 août · 23h59',
   '2026-08-28': 'mardi 25 août · 23h59',
   '2026-08-29': 'mercredi 26 août · 23h59',
   '2026-08-30': 'jeudi 27 août · 23h59',
   '2026-08-31': 'vendredi 28 août · 23h59',
+  '2026-09-01': 'samedi 29 août · 23h59',
+  '2026-09-02': 'dimanche 30 août · 23h59',
+  '2026-09-03': 'lundi 31 août · 23h59',
+  '2026-09-04': 'mardi 1 septembre · 23h59',
+  '2026-09-05': 'mercredi 2 septembre · 23h59',
+  '2026-09-06': 'jeudi 3 septembre · 23h59',
 };
 
 let selectedDateISO = null;
@@ -322,16 +329,20 @@ function buildCalendar(){
   const strip = document.getElementById('calStrip');
   strip.innerHTML = '';
   const today = new Date(); today.setHours(0,0,0,0);
+  const monthAbbr = ['JANV','FÉVR','MARS','AVR','MAI','JUIN','JUIL','AOÛT','SEPT','OCT','NOV','DÉC'];
   const d = new Date(STRIKE_START);
+  let first = true;
   while(d <= STRIKE_END){
     const iso = isoDate(d);
     const isToday = isoDate(today) === iso;
+    const showMonth = first || d.getDate() === 1;
     const pill = document.createElement('div');
     pill.className = 'day-pill' + (isToday ? ' today' : '') + (iso === selectedDateISO ? ' selected' : '');
-    pill.innerHTML = `<div class="dow">${DOW[d.getDay()]}</div><div class="num">${d.getDate()}</div>`;
+    pill.innerHTML = `<div class="dow">${showMonth ? monthAbbr[d.getMonth()] : DOW[d.getDay()]}</div><div class="num">${d.getDate()}</div>`;
     pill.onclick = () => selectDay(pill, iso);
     strip.appendChild(pill);
     d.setDate(d.getDate()+1);
+    first = false;
   }
 }
 
@@ -364,7 +375,8 @@ function shortDateLabel(iso){
   const [y,m,d] = iso.split('-').map(Number);
   const dt = new Date(y, m-1, d);
   const days=['dim','lun','mar','mer','jeu','ven','sam'];
-  return `${days[dt.getDay()]} ${d} août`;
+  const months=['janv.','févr.','mars','avr.','mai','juin','juil.','août','sept.','oct.','nov.','déc.'];
+  return `${days[dt.getDay()]} ${d} ${months[m-1]}`;
 }
 
 function buildPeriodSelects(){
@@ -433,7 +445,7 @@ function openMail(){
   if(!window.__declBody) updateDeclaration();
   const subject = encodeURIComponent("Préavis de grève — Déclaration individuelle d'intention");
   const body = encodeURIComponent(window.__declBody);
-  const href = `mailto:hr@frenchbee.com?cc=grevepnc26@gmail.com&subject=${subject}&body=${body}`;
+  const href = `mailto:hr@frenchbee.com,strikecabincrew@frenchbee.com?cc=grevefbu2026@gmail.com&subject=${subject}&body=${body}`;
   window.location.href = href;
 }
 
